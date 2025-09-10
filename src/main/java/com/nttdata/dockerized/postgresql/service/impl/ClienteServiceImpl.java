@@ -29,6 +29,7 @@ public class ClienteServiceImpl implements ClienteService {
         boolean existe = clienteRepository.existsByEmail(createClienteDTO.getEmail());
         if (existe)
             throw new BadRequestException("Ya existe un cliente con ese email");
+
         Cliente cliente = clienteMapper.toEntity(createClienteDTO);
         cliente.setFechaRegistro(LocalDate.now());
         cliente.setActivo(true);

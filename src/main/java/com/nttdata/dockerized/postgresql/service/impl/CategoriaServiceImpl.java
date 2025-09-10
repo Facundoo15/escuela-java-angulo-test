@@ -1,6 +1,6 @@
 package com.nttdata.dockerized.postgresql.service.impl;
 
-import com.nttdata.dockerized.postgresql.exception.BadRequestException;
+import com.nttdata.dockerized.postgresql.exception.DuplicateCategoryException;
 import com.nttdata.dockerized.postgresql.exception.ResourceNotFoundException;
 import com.nttdata.dockerized.postgresql.mapper.CategoriaMapper;
 import com.nttdata.dockerized.postgresql.model.dto.CreateCategoriaDTO;
@@ -22,12 +22,14 @@ public class CategoriaServiceImpl implements CategoriaService {
     private final CategoriaRepository categoriaRepository;
     private final CategoriaMapper categoriaMapper;
 
+    // ACÁ ESTA LA EXCEPCIÓN - HANDLER POR CAMPO O ATRIBUTO (DUPLICATECATEGORY)
+    // Y EN ESTA FUNCIÓN SE LANZA
     @Override
     @Transactional
     public ResponseCategoriaDTO crearCategoria(CreateCategoriaDTO createCategoriaDTO) {
         boolean result = categoriaRepository.existsByNombre(createCategoriaDTO.getNombre());
         if (result)
-            throw new BadRequestException("La categoria ya existe");
+            throw new DuplicateCategoryException(createCategoriaDTO.getNombre());
         Categoria categoria = categoriaMapper.toEntity(createCategoriaDTO);
         categoria = categoriaRepository.save(categoria);
         return categoriaMapper.toDto(categoria);

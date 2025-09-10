@@ -8,8 +8,9 @@ import com.nttdata.dockerized.postgresql.model.dto.ResponsePedidoDTO;
 import com.nttdata.dockerized.postgresql.model.entity.Cliente;
 import com.nttdata.dockerized.postgresql.model.entity.DetallePedido;
 import com.nttdata.dockerized.postgresql.model.entity.Pedido;
+import com.nttdata.dockerized.postgresql.model.entity.Producto;
+import com.nttdata.dockerized.postgresql.model.enums.EstadoPedido;
 import com.nttdata.dockerized.postgresql.repository.ClienteRepository;
-import com.nttdata.dockerized.postgresql.repository.DetallePedidoRepository;
 import com.nttdata.dockerized.postgresql.repository.PedidoRepository;
 import com.nttdata.dockerized.postgresql.repository.ProductoRepository;
 import com.nttdata.dockerized.postgresql.service.PedidoService;
@@ -23,16 +24,14 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PedidoServiceImpl implements PedidoService{
+public class PedidoServiceImpl implements PedidoService {
 
     private final ProductoRepository productoRepository;
     private final PedidoRepository pedidoRepository;
     private final ClienteRepository clienteRepository;
-    private final DetallePedidoRepository detallePedidoRepository;
     private final PedidoMapper pedidoMapper;
     private final DetallePedidoMapper detallePedidoMapper;
 
-    @Override
     @Transactional
     public ResponsePedidoDTO crearPedido(CreatePedidoDTO createPedidoDTO) {
         Cliente cliente = clienteRepository.findById(createPedidoDTO.getClienteId())
@@ -41,35 +40,38 @@ public class PedidoServiceImpl implements PedidoService{
         Pedido pedido = pedidoMapper.toEntity(createPedidoDTO);
         pedido.setCliente(cliente);
         pedido.setFechaPedido(createPedidoDTO.getFechaPedido());
-
-        Pedido pedidoGuardado = pedidoRepository.save(pedido);
+        pedido.setEstadoPedido(EstadoPedido.PENDIENTE);
+        pedido.setTotal(BigDecimal.ZERO);
 
         List<DetallePedido> detalles = createPedidoDTO.getDetalles().stream()
                 .map(detalleDTO -> {
                     DetallePedido detalle = detallePedidoMapper.toEntity(detalleDTO);
-                    detalle.setPedido(pedidoGuardado);
 
-                    BigDecimal precioUnitario = obtenerPrecioProducto(detalleDTO.getProductoId());
+
+                    Producto producto = productoRepository.findById(detalleDTO.getProductoId())
+                            .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado"));
+                    detalle.setProducto(producto);
+
+
+                    detalle.setPedido(pedido);
+
+                    BigDecimal precioUnitario = producto.getPrecio();
                     detalle.setPrecioUnitario(precioUnitario);
-
-                    BigDecimal totalDetalle = precioUnitario.multiply(BigDecimal.valueOf(detalle.getCantidad()));
-                    detalle.setTotalDetalle(totalDetalle);
+                    detalle.setTotalDetalle(precioUnitario.multiply(BigDecimal.valueOf(detalle.getCantidad())));
 
                     return detalle;
                 }).toList();
-
-        detallePedidoRepository.saveAll(detalles);
-        pedidoGuardado.setDetalles(detalles);
-
+        pedido.setDetalles(detalles);
         BigDecimal totalPedido = detalles.stream()
                 .map(DetallePedido::getTotalDetalle)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+        pedido.setTotal(totalPedido);
 
-        pedidoGuardado.setTotal(totalPedido);
-        pedidoRepository.save(pedidoGuardado);
+        Pedido pedidoGuardado = pedidoRepository.save(pedido);
 
         return pedidoMapper.toDto(pedidoGuardado);
     }
+
 
     private BigDecimal obtenerPrecioProducto(Long productoId) {
         return productoRepository.findById(productoId)

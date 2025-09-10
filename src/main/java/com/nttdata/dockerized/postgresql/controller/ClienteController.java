@@ -4,9 +4,8 @@ import com.nttdata.dockerized.postgresql.model.dto.CreateClienteDTO;
 import com.nttdata.dockerized.postgresql.model.dto.ResponseClienteDTO;
 import com.nttdata.dockerized.postgresql.model.dto.UpdateClienteDTO;
 import com.nttdata.dockerized.postgresql.service.ClienteService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,29 +18,27 @@ public class ClienteController {
     private final ClienteService clienteService;
 
     @PostMapping
-    public ResponseEntity<ResponseClienteDTO> crear(@RequestBody CreateClienteDTO dto) {
-        ResponseClienteDTO creado = clienteService.crearCliente(dto);
-        return new ResponseEntity<>(creado, HttpStatus.OK);
+    public ResponseClienteDTO crear(@RequestBody @Valid CreateClienteDTO dto) {
+        return clienteService.crearCliente(dto);
     }
 
     @GetMapping
-    public ResponseEntity<List<ResponseClienteDTO>> listar() {
-        return ResponseEntity.ok(clienteService.listarClientes());
+    public List<ResponseClienteDTO> listar() {
+        return clienteService.listarClientes();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseClienteDTO> obtener(@PathVariable Long id) {
-        return ResponseEntity.ok(clienteService.obtenerClienteId(id));
+    public ResponseClienteDTO obtener(@PathVariable Long id) {
+        return clienteService.obtenerClienteId(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseClienteDTO> actualizar(@PathVariable Long id, @RequestBody UpdateClienteDTO dto) {
-        return ResponseEntity.ok(clienteService.actualizarCliente(id, dto));
+    public ResponseClienteDTO actualizar(@PathVariable Long id, @RequestBody @Valid UpdateClienteDTO dto) {
+        return clienteService.actualizarCliente(id, dto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    public void eliminar(@PathVariable Long id) {
         clienteService.eliminarCliente(id);
-        return ResponseEntity.noContent().build();
     }
 }
