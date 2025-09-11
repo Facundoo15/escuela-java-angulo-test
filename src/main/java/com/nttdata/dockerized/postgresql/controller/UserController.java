@@ -32,4 +32,14 @@ public class UserController {
     public UserSaveResponseDto save(@RequestBody UserSaveRequestDto userSaveRequestDto) {
         return INSTANCE.toUserSaveResponseDto(userService.save(INSTANCE.toEntity(userSaveRequestDto)));
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userService.delete(id);
+    }
+
+    @PutMapping("/{id}")
+    public UserDto updateUser(@PathVariable Long id, @RequestBody UserSaveRequestDto userDto) {
+        return INSTANCE.map(userService.update(id, INSTANCE.toEntity(userDto)));
+    }
 }
