@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: pedidocomposition-microservice
+  cloud:
+    config:
+      enabled: false
+    import-check:
+      enabled: false
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+    initial-instance-info-enabled: true
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 2000
+        readTimeout: 5000
+        loggerLevel: full
+        retryer:
+
+          period: 1000
+          maxPeriod: 5000
+          maxAttempts: 5

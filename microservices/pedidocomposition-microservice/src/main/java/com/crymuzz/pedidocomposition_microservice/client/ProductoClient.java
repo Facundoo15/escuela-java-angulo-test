@@ -1,7 +1,7 @@
-package com.crymuzz.pedido_microservice.client;
+package com.crymuzz.pedidocomposition_microservice.client;
 
-import com.crymuzz.pedido_microservice.model.dto.ApiResponse;
-import com.crymuzz.pedido_microservice.model.dto.ResponseProductDTO;
+import com.crymuzz.pedidocomposition_microservice.dto.ApiResponse;
+import com.crymuzz.pedidocomposition_microservice.dto.ResponseProductDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
