@@ -77,9 +77,6 @@ public class PedidoServiceImpl implements PedidoService {
         return pedidoMapper.toDto(pedidoGuardado);
     }
 
-
-
-
     @Override
     public List<ResponsePedidoDTO> listarPedidos() {
         List<Pedido> pedidos = pedidoRepository.findAll();

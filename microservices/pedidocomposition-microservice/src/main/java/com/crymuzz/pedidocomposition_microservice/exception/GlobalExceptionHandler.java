@@ -1,7 +1,7 @@
-package com.crymuzz.pedido_microservice.exception;
+package com.crymuzz.pedidocomposition_microservice.exception;
 
-import com.crymuzz.pedido_microservice.model.dto.CustomErrorResponse;
-import jakarta.persistence.EntityNotFoundException;
+
+import com.crymuzz.pedidocomposition_microservice.dto.CustomErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({EntityNotFoundException.class, ResourceNotFoundException.class})
+    @ExceptionHandler({ResourceNotFoundException.class})
     public ResponseEntity<CustomErrorResponse> handleNotFound(RuntimeException ex, HttpServletRequest request) {
         CustomErrorResponse error = new CustomErrorResponse(
                 LocalDateTime.now(),

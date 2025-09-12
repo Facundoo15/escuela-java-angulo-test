@@ -1,4 +1,4 @@
-package com.crymuzz.pedido_microservice;
+package com.crymuzz.pedidocomposition_microservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,10 +8,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableFeignClients
 @EnableDiscoveryClient
-public class PedidoMicroserviceApplication {
+public class PedidocompositionMicroserviceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PedidoMicroserviceApplication.class, args);
+		SpringApplication.run(PedidocompositionMicroserviceApplication.class, args);
 	}
 
 }
