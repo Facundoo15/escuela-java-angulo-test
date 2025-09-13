@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: pedido-microservice
+  datasource:
+    url: jdbc:postgresql://pedido_db:5432/pedido_db
+    username: pedido_user
+    password: pedido_pass
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/

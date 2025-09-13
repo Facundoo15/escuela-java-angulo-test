@@ -9,15 +9,20 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>microservices/pedido-microservice</module>
+        <module>microservices/config-server</module>
+        <module>microservices/eureka-server</module>
         <module>microservices/producto-microservice</module>
+        <module>microservices/pedido-microservice</module>
+        <module>microservices/pedidocomposition-microservice</module>
+        <module>microservices/stockms-microservice</module>
+
     </modules>
 
     <properties>
         <java.version>21</java.version>
         <org.mapstruct.version>1.6.3</org.mapstruct.version>
         <org.lombok.version>1.18.30</org.lombok.version>
-        <spring-boot.version>3.3.4</spring-boot.version>
+        <spring-boot.version>3.3.5</spring-boot.version>
     </properties>
 
     <dependencyManagement>

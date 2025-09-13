@@ -1,6 +1,5 @@
 package com.crymuzz.pedido_microservice.exception;
 
-
 import com.crymuzz.pedido_microservice.model.dto.CustomErrorResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;

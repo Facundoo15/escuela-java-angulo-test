@@ -1,27 +1,53 @@
 services:
+  eureka-server:
+    build: ./microservices/eureka-server
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+
   pedido-microservice:
     build: ./microservices/pedido-microservice
-    container_name: pedido-microservice
     ports:
       - "8081:8080"
-    environment:
-      DATABASE_URL: jdbc:postgresql://pedido_db:5432/pedido_db
-      DATABASE_USERNAME: pedido_user
-      DATABASE_PASSWORD: pedido_pass
     depends_on:
-      - pedido_db
+      - eureka-server
 
   producto-microservice:
     build: ./microservices/producto-microservice
-    container_name: producto-microservice
     ports:
       - "8082:8080"
-    environment:
-      DATABASE_URL: jdbc:postgresql://producto_db:5432/producto_db
-      DATABASE_USERNAME: producto_user
-      DATABASE_PASSWORD: producto_pass
     depends_on:
-      - producto_db
+      - eureka-server
+
+  pedidocomposition-microservice:
+    build: ./microservices/pedidocomposition-microservice
+    ports:
+      - "8083:8080"
+    depends_on:
+      - pedido-microservice
+      - producto-microservice
+      - eureka-server
+  stock-microservice:
+    build: ./microservices/stockms-microservice
+    ports:
+      - "8086:8080"
+    depends_on:
+      - eureka-server
+      - stock_db
+
+  stock_db:
+    image: mysql:8.0
+    container_name: stock_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: stock_db
+      MYSQL_USER: stock_user
+      MYSQL_PASSWORD: stock_pass
+    ports:
+      - "3307:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - stock_data:/var/lib/mysql
 
   pedido_db:
     image: postgres:15
@@ -32,8 +58,6 @@ services:
       POSTGRES_USER: pedido_user
       POSTGRES_PASSWORD: pedido_pass
       POSTGRES_DB: pedido_db
-    volumes:
-      - pedido_data:/var/lib/postgresql/data
 
   producto_db:
     image: postgres:15
@@ -44,9 +68,8 @@ services:
       POSTGRES_USER: producto_user
       POSTGRES_PASSWORD: producto_pass
       POSTGRES_DB: producto_db
-    volumes:
-      - producto_data:/var/lib/postgresql/data
 
 volumes:
   pedido_data:
   producto_data:
+  stock_data:

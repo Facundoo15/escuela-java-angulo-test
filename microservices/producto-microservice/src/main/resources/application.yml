@@ -1,0 +1,17 @@
+
+spring:
+  application:
+    name: producto-microservice
+  datasource:
+    url: jdbc:postgresql://producto_db:5432/producto_db
+    username: producto_user
+    password: producto_pass
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
