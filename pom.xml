@@ -14,6 +14,7 @@
         <module>microservices/producto-microservice</module>
         <module>microservices/pedido-microservice</module>
         <module>microservices/pedidocomposition-microservice</module>
+        <module>microservices/stockms-microservice</module>
 
     </modules>
 

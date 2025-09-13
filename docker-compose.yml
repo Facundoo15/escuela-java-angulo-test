@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   eureka-server:
     build: ./microservices/eureka-server
@@ -9,7 +7,6 @@ services:
 
   pedido-microservice:
     build: ./microservices/pedido-microservice
-    container_name: pedido-microservice
     ports:
       - "8081:8080"
     depends_on:
@@ -17,7 +14,6 @@ services:
 
   producto-microservice:
     build: ./microservices/producto-microservice
-    container_name: producto-microservice
     ports:
       - "8082:8080"
     depends_on:
@@ -25,15 +21,34 @@ services:
 
   pedidocomposition-microservice:
     build: ./microservices/pedidocomposition-microservice
-    container_name: pedidocomposition-microservice
     ports:
       - "8083:8080"
     depends_on:
       - pedido-microservice
       - producto-microservice
       - eureka-server
+  stock-microservice:
+    build: ./microservices/stockms-microservice
+    ports:
+      - "8086:8080"
+    depends_on:
+      - eureka-server
+      - stock_db
 
-  # Bases de datos
+  stock_db:
+    image: mysql:8.0
+    container_name: stock_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: stock_db
+      MYSQL_USER: stock_user
+      MYSQL_PASSWORD: stock_pass
+    ports:
+      - "3307:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - stock_data:/var/lib/mysql
+
   pedido_db:
     image: postgres:15
     container_name: pedido_db
@@ -57,3 +72,4 @@ services:
 volumes:
   pedido_data:
   producto_data:
+  stock_data:

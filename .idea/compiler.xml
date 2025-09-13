@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Annotation profile for pedidocomposition-microservice" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -27,6 +28,8 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.6.3/mapstruct-processor-1.6.3.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.6.3/mapstruct-1.6.3.jar" />
         </processorPath>
+        <module name="producto-microservice" />
+        <module name="stockms-microservice" />
         <module name="pedido-microservice" />
       </profile>
     </annotationProcessing>
@@ -42,6 +45,7 @@
       <module name="pedido-microservice" options="-parameters" />
       <module name="pedidocomposition-microservice" options="-parameters" />
       <module name="producto-microservice" options="-parameters" />
+      <module name="stockms-microservice" options="-parameters" />
     </option>
   </component>
 </project>
