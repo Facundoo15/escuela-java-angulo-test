@@ -69,17 +69,5 @@ public class GlobalExceptionHandler {
         return ResponseEntity.internalServerError().body(error);
     }
 
-    @ExceptionHandler(DuplicateCategoryException.class)
-    public ResponseEntity<CustomErrorResponse> handleDuplicate(DuplicateCategoryException ex, HttpServletRequest request) {
-        CustomErrorResponse error = new CustomErrorResponse(
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                ex.getMessage(),
-                request.getRequestURI()
-        );
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
-    }
-
     // FFASYR
 }
